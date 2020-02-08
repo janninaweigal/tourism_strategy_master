@@ -23,12 +23,14 @@
 
 <script>
 	import {login} from '@/api/getData'
+	import {mapActions} from 'vuex'
 	export default {
 	    data(){
 			return {
 				loginForm: {
 					username: '',
 					password: '',
+					isAdmin: 1
 				},
 				rules: {
 					username: [
@@ -41,11 +43,13 @@
 			}
 		},
 		methods: {
+			...mapActions(['saveAdminInfo']),
 			async submitForm(formName) {
 				this.$refs[formName].validate(async (valid) => {
 					if (valid) {
-						const res = await login({username: this.loginForm.username, password: this.loginForm.password})
+						const res = await login(this.loginForm)
 						if (res.code == 1) {
+							this.saveAdminInfo(res.data);
 							sessionStorage.setItem('adminToken','Bearer '+res.data.token)
 							this.$message({
 		                        type: 'success',

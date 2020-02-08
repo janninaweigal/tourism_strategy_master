@@ -1,6 +1,6 @@
 <template>
   <!--组件容器-->
-  <div>
+  <div class="tableContainer margin-top-20">
     <!-- 表格 -->
     <el-table v-loading="loading" :data="tableData" element-loading-text="加载中" highlight-current-row>
       <!-- 序号 -->
@@ -12,11 +12,29 @@
             {{ scope.row[item.prop] | dateformat('YYYY-MM-DD') }}
           </span>
           <span v-else-if="item.formMinutes">
-            {{ scope.row[item.prop] | dateformat('YYYY-MM-DD hh:mm:ss') }}
+            {{ scope.row[item.prop] | dateformat('YYYY-MM-DD HH:mm:ss') }}
           </span>
-          <span v-else>
-            {{ scope.row[item.prop] }}
+          <span v-else-if="item.isAvatar">
+            <img :src="imgUrl + scope.row[item.prop]" width="40px" height="40px"/>
           </span>
+          <span v-else-if="item.goodType">
+            {{scope.row[item.prop]===1?'自营':'非自营'}}
+          </span>
+          <span v-else-if="item.goodStatus">
+            {{handleGoodsStatus(scope.row[item.prop])}}
+          </span>
+          <span v-else-if="item.isTrainCode">
+            {{trainTypes[scope.row[item.prop1]]+"-"+scope.row[item.prop2]}}
+          </span>
+          <span v-else-if="item.isAdmin">
+            <el-tooltip :content="scope.row[item.prop]==1?'管理员':'普通用户'" placement="top">
+              <el-switch
+                :value="scope.row[item.prop]== 1"
+                disabled>
+              </el-switch>
+            </el-tooltip>
+          </span>
+          <div v-else v-html="scope.row[item.prop]"></div>
         </template>
       </el-table-column>
       <!-- 操作按钮 -->
@@ -36,6 +54,8 @@
         :current-page="searchData.pageNo"
         :page-sizes="[10, 20, 30, 50]"
         layout="total, prev, pager, next"
+        prev-text="上一页"
+        next-text="下一页"
         :total="total">
       </el-pagination>
     </div>
@@ -52,6 +72,10 @@ export default {
     fixed: {
       type: Boolean,
       default: false
+    },
+    trainTypes: {
+      type: Object,
+      default: () => {}
     },
     // 搜索条件
     searchData: {
@@ -116,7 +140,8 @@ export default {
       // 是否显示加载信息
       loading: false,
       currentRow: null,
-      total: 0
+      total: 0,
+      imgUrl: process.env.LOCAL_API
     };
   },
   created(){
@@ -137,7 +162,7 @@ export default {
           if(res.code == 1){
             vm.tableData = res.data.list
             vm.total = res.data.total
-            vm.tipsMessage(res.msg, 'success')
+            // vm.tipsMessage(res.msg, 'success')
           } else {
             vm.tipsMessage(res.msg, 'error')
           }
@@ -150,22 +175,37 @@ export default {
     /**
      * 编辑
      */
-    edit(index, row) {
-
+    edit(row) {
+      this.onEdit(row)
     },
     // 查看
     look(index, row) {
       this.onLook(index, row);
     },
-    remove(index, row) {
+    remove(row) {
       const vm = this;
-      this.$confirm('数据删除后将无法恢复，请问确认删除数据？', {
+      vm.$confirm('数据删除后将无法恢复，请问确认删除数据？', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         closeOnClickModal: false
       }).then(() => {
-        //
+        if(vm.deleteMethod){
+          vm.loading = true;
+          api[vm.deleteMethod]({id:row.Id}).then(res=>{
+            vm.loading = false;
+            if(res.code == 1){
+              vm.tipsMessage(res.msg, 'success')
+              vm.search();
+            } else {
+              vm.tipsMessage(res.msg, 'error')
+            }
+          }).catch(()=>{
+            vm.loading = false;
+            vm.tipsMessage('删除失败', 'error')
+          })
+        }
+        
       }).catch(() => { });
     },
     /**
@@ -193,7 +233,7 @@ export default {
      * 自定义序号
      */
     indexMethod(index) {
-      return this.searchData.pageSize * (this.searchData.pageNo - 1) + index + 1;
+      return (index + 1) + (this.searchData.pageNo - 1) * this.searchData.pageSize;
     },
     tipsMessage(txt, type) {
       // 消息提示
@@ -203,7 +243,29 @@ export default {
         showClose: true,
         duration: 3 * 1000
       });
+    },
+    handleGoodsStatus(status){
+      let result = '默认'
+      switch(status){
+        case 1:
+          result = '上架';
+          break;
+        case 2:
+          result = '销售';
+          break;
+        case 3:
+          result = '下架';
+          break;
+      }
+      return result
     }
   }
 };
 </script>
+
+<style>
+  .tableContainer .el-switch.is-checked .el-switch__core {
+    border-color: #20a0ff !important;
+    background-color: #20a0ff !important;
+  }
+</style>

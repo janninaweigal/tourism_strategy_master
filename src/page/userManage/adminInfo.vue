@@ -1,31 +1,24 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
-        <header class="admin_title">管理员信息</header>
+        <header class="admin_title">个人中心</header>
         <div class="admin_set">
             <ul>
                 <li>
-                    <span>姓名：</span><span>{{adminInfo.user_name}}</span>
+                    <span>姓名：{{adminInfo.username}}</span>
                 </li>
                 <li>
-                    <span>注册时间：</span><span>{{adminInfo.create_time}}</span>
-                </li>
-                <li>
-                    <span>管理员权限：</span><span>{{adminInfo.admin}}</span>
-                </li>
-                <li>
-                    <span>管理员 ID：</span><span>{{adminInfo.id}}</span>
+                    <span>注册时间：{{ adminInfo.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
                 </li>
                 <li>
                     <span>更换头像：</span>
+                    <img :src="baseImgPath + adminInfo.avatar" class="avatar">
                     <el-upload
-                      class="avatar-uploader"
                       :action="baseUrl + '/admin/update/avatar/' + adminInfo.id"
                       :show-file-list="false"
                       :on-success="uploadImg"
                       :before-upload="beforeImgUpload">
-                      <img v-if="adminInfo.avatar" :src="baseImgPath + adminInfo.avatar" class="avatar">
-                      <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                      <el-button>更换头像</el-button>
                     </el-upload>
                 </li>    
             </ul>
@@ -91,6 +84,7 @@
         border-radius: 10px;
         ul > li{
             padding: 20px;
+            text-align: center;
             span{
                 color: #666;
             }
@@ -112,17 +106,10 @@
     .avatar-uploader .el-upload:hover {
         border-color: #20a0ff;
     }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 120px;
-        height: 120px;
-        line-height: 120px;
-        text-align: center;
-    }
     .avatar {
         width: 120px;
         height: 120px;
         display: block;
+        margin: 10px auto;
     }
 </style>

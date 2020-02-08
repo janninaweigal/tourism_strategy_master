@@ -14,6 +14,8 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 			dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
 			url = url + '?' + dataStr;
 		}
+	} else if (type == 'DELETE') {
+		url += '/' + data.id;
 	}
 	if (window.fetch && method == 'fetch') {
 		let requestConfig = {
@@ -30,7 +32,7 @@ export default async(url = '', data = {}, type = 'GET', method = 'fetch') => {
 			requestConfig.headers.Authorization = sessionStorage.getItem('adminToken')
 		}
 
-		if (type == 'POST') {
+		if (type == 'POST' || type == 'PUT') {
 			Object.defineProperty(requestConfig, 'body', {
 				value: JSON.stringify(data)
 			})

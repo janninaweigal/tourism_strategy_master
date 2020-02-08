@@ -16,8 +16,8 @@
   },
   "dependencies": {
     "echarts": "^3.5.4",
-    "element-ui": "^1.2.9",
-    "miment": "^0.0.9",
+    "element-ui": "^2.13.0",
+    "moment": "^2.24.0",
     "vue": "^2.2.6",
     "vue-quill-editor": "^2.2.1",
     "vue-router": "^2.3.1",

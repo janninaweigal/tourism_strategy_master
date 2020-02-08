@@ -1,33 +1,22 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {getAdminInfo} from '@/api/getData'
 
 Vue.use(Vuex)
 
 const state = {
-	adminInfo: {
-		avatar: 'default.png'
-	},
+	adminInfo: sessionStorage.getItem('adminInfo')?JSON.parse(sessionStorage.getItem('adminInfo')): 'images/default.png'
 }
 
 const mutations = {
 	saveAdminInfo(state, adminInfo){
+		sessionStorage.setItem('adminInfo',JSON.stringify(adminInfo));
 		state.adminInfo = adminInfo;
 	}
 }
 
 const actions = {
-	async getAdminData({commit}){
-		try{
-			const res = await getAdminInfo()
-			if (res.status == 1) {
-				commit('saveAdminInfo', res.data);
-			}else{
-				throw new Error(res.type)
-			}
-		}catch(err){
-			// console.log(err.message)
-		}
+	async saveAdminInfo({commit},data){
+		commit('saveAdminInfo',data);
 	}
 }
 

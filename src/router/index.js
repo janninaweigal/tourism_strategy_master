@@ -30,14 +30,10 @@ const routes = [
 			component: resolve => require(['@/page/userManage/userList'], resolve),
 			meta: ['人员管理','用户列表']
 		},{
-			path: '/adminList',
-			component: resolve => require(['@/page/userManage/adminList'], resolve),
-			meta: ['人员管理','管理员列表']
-		},{
 			path: '/adminInfo',
 			component: resolve => require(['@/page/userManage/adminInfo'], resolve),
 			meta: {
-				title: '个人信息'
+				title: '个人中心'
 			}
 		},
 		// 旅行必备

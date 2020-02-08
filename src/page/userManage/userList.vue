@@ -1,120 +1,202 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
-        <div class="table_container">
-            <el-table
-                :data="tableData"
-                highlight-current-row
-                style="width: 100%">
-                <el-table-column
-                  type="index"
-                  width="100">
-                </el-table-column>
-                <el-table-column
-                  property="registe_time"
-                  label="注册日期"
-                  width="220">
-                </el-table-column>
-                <el-table-column
-                  property="username"
-                  label="用户姓名"
-                  width="220">
-                </el-table-column>
-                <el-table-column
-                  property="city"
-                  label="注册地址">
-                </el-table-column>
-            </el-table>
-            <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="20"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
+        <div class="padding-20">
+            <el-form inline @submit.native.prevent>
+                <el-form-item>
+                    <el-input v-model.trim="searchData.globalName" placeholder="用户名/邮箱" class="input-width-230" @keyup.enter.native="search()"/>
+                </el-form-item>
+                <el-form-item>
+                    <!-- 查询按钮 -->
+                    <el-button type="primary" @click="search()" >搜索</el-button>
+                    <!-- 重置按钮 -->
+                    <el-button class="button" @click="reset">重置</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- 添加按钮 -->
+            <el-button type="primary" @click="addAdminInfo">添加用户</el-button>
+            <!-- 下方表格 -->
+            <customTable ref="customTable" :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getUserList" delete-method="deleteUser"/>
+            <!-- 弹窗 -->
+            <el-dialog
+                :title="isCreate?'添加用户信息':'编辑用户信息'"
+                :visible.sync="dialogVisible"
+                width="480px"
+                :before-close="handleClose">
+                <el-form :model="form" :rules="rules" ref="dialogForm" label-width="100px">
+                    <el-form-item label="用户名" prop="username">
+                        <el-input v-model="form.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" prop="email">
+                        <el-input v-model="form.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="是否管理员">
+                        <el-switch
+                            v-model="form.isAdmin"
+                            active-text="管理员"
+                            inactive-text="普通用户">
+                        </el-switch>
+                    </el-form-item>
+                    <el-form-item label="头像">
+                        <upload-img :image-url="form.avatar" @uploadAvatar="uploadAvatar"/>
+                    </el-form-item>
+                    <el-form-item label="备注">
+                        <el-input type="textarea" disabled v-model="desc"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="handleClose">取 消</el-button>
+                    <el-button type="primary" v-loading.fullscreen.lock="loading" @click="submitForm">确 定</el-button>
+                </span>
+            </el-dialog>
         </div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    import {getUserList, getUserCount} from '@/api/getData'
+    import customTable from '@/components/table';
+    import uploadImg from '@/components/uploadImg';
+    const api = require('@/api/getData')
     export default {
+        // 名称
+        name: 'adminList',
         data(){
             return {
-                tableData: [{
-                  registe_time: '2016-05-02',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                  registe_time: '2016-05-04',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                  registe_time: '2016-05-01',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                  registe_time: '2016-05-03',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1516 弄'
-                }],
-                currentRow: null,
-                offset: 0,
-                limit: 20,
+                loading: false,
+                tableData: [],
+                searchData: {
+                    pageSize: 10,
+                    pageNo: 1,
+                    globalName: ''
+                },
+                tableCols: [
+                    { label: '姓名', prop: 'Username'},
+                    { label: '头像', prop: 'Avatar',isAvatar: true},
+                    { label: '邮箱', prop: 'Email'},
+                    { label: '是否管理员', prop: 'IsAdmin',isAdmin: true},
+                    { label: '创建时间', prop: 'CreateTime',formMinutes:true}
+                ],
                 count: 0,
-                currentPage: 1,
+                isCreate: true,
+                desc: '密码默认123456，修改密码请到个人中心修改',
+                form: {
+                    username: '',
+                    password: '123456',
+                    email: '',
+                    avatar: '',
+                    isAdmin: false
+                },
+                dialogVisible: false,
+                rules: {
+                    username: [
+                        { required: true, message: '请输入用户名', trigger: 'blur' },
+                        { min: 3, max: 15, message: '长度在 3 到 15 个字符', trigger: 'blur' }
+                    ],
+                    email: [
+                        { required: true, message: '请输入邮箱地址', trigger: 'blur' },
+                        { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change']}
+                    ]
+                }
             }
         },
     	components: {
-    		headTop,
+            headTop,
+            customTable,
+            uploadImg
     	},
-        created(){
-            this.initData();
-        },
         methods: {
-            async initData(){
-                try{
-                    const countData = await getUserCount();
-                    if (countData.status == 1) {
-                        this.count = countData.count;
-                    }else{
-                        throw new Error('获取数据失败');
-                    }
-                    this.getUsers();
-                }catch(err){
-                    console.log('获取数据失败', err);
-                }
+            search(){
+                this.$refs.customTable.search();
+            },
+            // 重置搜索条件
+            reset() {
+                this.searchData.globalName = '';
             },
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                this.searchData.pageNo = val;
             },
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
-                this.getUsers()
+            edit(row){
+                let form = Object.assign({},row)
+                this.isCreate = false
+                this.form.id = form.Id
+                this.form.username = form.Username
+                this.form.email = form.Email
+                this.form.avatar = process.env.LOCAL_API + form.Avatar
+                this.form.isAdmin = form.isAdmin ==1
+                this.dialogVisible = true
             },
-            async getUsers(){
-                const Users = await getUserList({offset: this.offset, limit: this.limit});
-                this.tableData = [];
-                Users.forEach(item => {
-                    const tableData = {};
-                    tableData.username = item.username;
-                    tableData.registe_time = item.registe_time;
-                    tableData.city = item.city;
-                    this.tableData.push(tableData);
-                })
+            addAdminInfo(){
+                this.isCreate = true
+                this.dialogVisible =true;
+            },
+            // 关闭弹窗
+            handleClose(){
+                this.resetForm();
+                this.dialogVisible = false
+            },
+            // 弹窗提交
+            submitForm(){
+                this.$refs.dialogForm.validate((valid) => {
+                    if (valid) {
+                        let form = Object.assign({},this.form)
+                        if(form.avatar){
+                            const reg=new RegExp(process.env.LOCAL_API,"gmi");
+                            if(form.avatar.indexOf(process.env.LOCAL_API)!=-1){
+                                form.avatar = form.avatar.replace(reg,'')
+                            }
+                        }
+                        this.loading = true
+                        const method = this.isCreate?'insertUser':'updateUser'
+                        api[method](form).then(res=>{
+                            this.loading = false;
+                            if(res.code == 1){
+                                this.resetForm();
+                                this.dialogVisible = false
+                                this.tipsMessage(res.msg, 'success')
+                                this.search();
+                            } else {
+                                this.tipsMessage(res.msg, 'error')
+                            }
+                        }).catch(err=>{
+                            this.loading = false;
+                            this.tipsMessage(err.msg, 'error')
+                        })
+                    } else {
+                        return false;
+                    }
+                });
+            },
+            // 重置表单
+            resetForm(){
+                this.$refs.dialogForm.resetFields();
+                this.form = {
+                    username: '',
+                    email: '',
+                    avatar: '',
+                    isAdmin: false
+                }
+            },
+            uploadAvatar(file){
+                this.form.avatar = file.url
+                // 实例化FormData对象
+                const reader = new FileReader();
+                reader.readAsDataURL(file.raw);
+                reader.onloadend = ()=> {
+                    this.form.file = reader.result
+                }
+            },
+            tipsMessage(txt, type) {
+                // 消息提示
+                this.$message({
+                    message: txt,
+                    type: type,
+                    showClose: true,
+                    duration: 3 * 1000
+                });
             }
         },
     }
 </script>
 
-<style lang="less">
-	@import '../../style/mixin';
-    .table_container{
-        padding: 20px;
-    }
-</style>
+

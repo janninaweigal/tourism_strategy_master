@@ -1,14 +1,14 @@
 <template>
     <div class="header_container">
-
 		<el-breadcrumb separator="/">
 			<el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
 			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
-		<el-dropdown @command="handleCommand" menu-align='start'>
-			<img :src="baseImgPath + adminInfo.avatar" class="avator">
+		<el-dropdown @command="handleCommand">
+			<div class="userbox"><span class="username">{{adminInfo.username}}</span><img :src="baseImgPath + adminInfo.avatar" class="avator"></div>
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="statistics">首页</el-dropdown-item>
+				<el-dropdown-item command="adminInfo">个人中心</el-dropdown-item>
 				<el-dropdown-item command="signout">退出</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
@@ -33,6 +33,8 @@
 			async handleCommand(command) {
 				if (command == 'statistics') {
 					this.$router.push('/home');
+				}else if(command == 'adminInfo'){
+					this.$router.push('/adminInfo');
 				}else if(command == 'signout'){
 					sessionStorage.removeItem('adminToken')
 					this.$message({
@@ -55,11 +57,21 @@
 		justify-content: space-between;
 		align-items: center;
 		padding-left: 20px;
+		.userbox{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.username{
+			margin-right:20px;
+			font-weight: bolder;
+		}
 	}
 	.avator{
 		.wh(36px, 36px);
 		border-radius: 50%;
 		margin-right: 37px;
+		cursor: pointer;
 	}
 	.el-dropdown-menu__item{
         text-align: center;

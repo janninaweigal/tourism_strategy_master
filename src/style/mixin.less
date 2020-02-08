@@ -1,6 +1,7 @@
 @blue: #3190e8;  
 @bc: #e4e4e4;
 @fc:#fff;
+@red:#ed3a3e;
 
 // 背景图片地址和大小
 .bis(@url) { 
@@ -31,7 +32,9 @@
     margin-top: -@height/2;
     margin-left: -@width/2;
 }
-
+button.text-danger,button.text-danger:hover {
+	color: @red !important;
+}
 //定位上下居中
 .tb {  
 	position: absolute;
