@@ -7,6 +7,7 @@ const routes = [
 	{
 		path: '/',
 		component: resolve => require(['@/page/login'], resolve),
+		keepAlive: true,
 		meta: {
 			title: '用户登陆'
 		}
@@ -48,9 +49,14 @@ const routes = [
 		},
 		// 攻略信息
 		{
-			path: '/trategyList',
+			path: '/strategyList',
 			component: resolve => require(['@/page/strategy/index'], resolve),
-			meta: ['攻略信息','攻略列表']
+			meta: ['攻略信息','攻略列表'],
+		},
+		{
+			path: '/strategyInfo',
+			component: resolve => require(['@/page/strategy/info'], resolve),
+			meta: ['攻略信息']
 		},
 		// 车票管理
 		{
@@ -64,11 +70,21 @@ const routes = [
 			component: resolve => require(['@/page/touristSpot/index'], resolve),
 			meta: ['旅游景点','景点列表']
 		},
+		{
+			path: '/touristSpotInfo',
+			component: resolve => require(['@/page/touristSpot/info'], resolve),
+			meta: ['旅游景点']
+		},
 		// 酒店管理
 		{
 			path: '/hotelList',
 			component: resolve => require(['@/page/hotel/index'], resolve),
 			meta: ['酒店管理','酒店列表']
+		},
+		{
+			path: '/hotelInfo',
+			component: resolve => require(['@/page/hotel/info'], resolve),
+			meta: ['酒店管理']
 		},{
 			path: '/hotelOrder',
 			component: resolve => require(['@/page/hotel/order'], resolve),

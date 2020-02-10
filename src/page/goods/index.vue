@@ -16,12 +16,11 @@
             <!-- 添加按钮 -->
             <el-button type="primary" @click="addAdminInfo">添加商品</el-button>
             <!-- 下方表格 -->
-            <customTable ref="customTable" :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getGoodsList" delete-method="deleteGoods"/>
+            <customTable ref="customTable" isCheckImg :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getGoodsList" delete-method="deleteGoods"/>
             <!-- 弹窗 -->
             <el-dialog
                 :title="isCreate?'添加商品信息':'编辑商品信息'"
                 :visible.sync="dialogVisible"
-                width="480px"
                 :before-close="handleClose">
                 <el-form :model="form" :rules="rules" ref="dialogForm" label-width="100px">
                     <el-form-item label="商品名称" prop="Name">

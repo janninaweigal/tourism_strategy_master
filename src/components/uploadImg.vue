@@ -24,7 +24,6 @@
         },
         data() {
             return {
-                uploadUrl: 'user/uploadImg'
             }
         },
         methods: {

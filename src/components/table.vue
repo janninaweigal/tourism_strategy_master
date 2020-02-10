@@ -17,8 +17,14 @@
           <span v-else-if="item.isAvatar">
             <img :src="imgUrl + scope.row[item.prop]" width="40px" height="40px"/>
           </span>
+          <span v-else-if="item.pictures">
+            <img v-for="item in JSON.parse(scope.row[item.prop]).pictures" style="cursor:pointer;margin-right:5px;margin-bottom:5px;" :src="item.url" @click="preview(item.url)" width="40px" height="40px"/>
+          </span>
           <span v-else-if="item.goodType">
             {{scope.row[item.prop]===1?'自营':'非自营'}}
+          </span>
+          <span v-else-if="item.isSwitch" :style="{'color':scope.row[item.prop]===1?'#00ff89':'red'}">
+            {{scope.row[item.prop]===1?'是':'否'}}
           </span>
           <span v-else-if="item.goodStatus">
             {{handleGoodsStatus(scope.row[item.prop])}}
@@ -43,6 +49,10 @@
           <el-button type="text" @click="edit(scope.row)">编辑</el-button>
           <div class="buttonLine" />
           <el-button class="text-danger" type="text" @click="remove(scope.row)">删除</el-button>
+          <div v-show="isCheck">
+            <div class="buttonLine" />
+            <el-button type="info" @click="checkInfo(scope.row)">查看详情</el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -58,6 +68,11 @@
         next-text="下一页"
         :total="total">
       </el-pagination>
+      <div v-show="isCheckImg">
+        <el-dialog :visible.sync="dialogVisible">
+          <img :src="dialogImageUrl" width="100%" alt="">
+        </el-dialog>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +91,14 @@ export default {
     trainTypes: {
       type: Object,
       default: () => {}
+    },
+    isCheck:{
+      type: Boolean,
+      default: false
+    },
+    isCheckImg:{
+      type: Boolean,
+      default: false
     },
     // 搜索条件
     searchData: {
@@ -135,6 +158,8 @@ export default {
   // 引入组件
   data() {
     return {
+      dialogImageUrl: '',
+      dialogVisible:false,
       // 搜索结果数据
       tableData: [],
       // 是否显示加载信息
@@ -205,7 +230,6 @@ export default {
             vm.tipsMessage('删除失败', 'error')
           })
         }
-        
       }).catch(() => { });
     },
     /**
@@ -243,6 +267,13 @@ export default {
         showClose: true,
         duration: 3 * 1000
       });
+    },
+    preview(url){
+      this.dialogImageUrl = url;
+      this.dialogVisible = true
+    },
+    checkInfo(row){
+      this.onLook(row)
     },
     handleGoodsStatus(status){
       let result = '默认'

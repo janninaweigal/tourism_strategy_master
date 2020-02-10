@@ -21,7 +21,6 @@
             <el-dialog
                 :title="isCreate?'添加用户信息':'编辑用户信息'"
                 :visible.sync="dialogVisible"
-                width="480px"
                 :before-close="handleClose">
                 <el-form :model="form" :rules="rules" ref="dialogForm" label-width="100px">
                     <el-form-item label="用户名" prop="username">

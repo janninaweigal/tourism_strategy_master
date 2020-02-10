@@ -27,7 +27,16 @@ module.exports = {
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: 'http://localhost:3000/', // 设置你调用的接口域名和端口号
+        changeOrigin: true, // 跨域
+        ws: false,
+        pathRewrite: {
+          '^/api': '/' // 这里理解成用‘/api’代替target里面的地址，后面组件中我们掉接口时直接用api代替
+        }
+      }
+    },
     context: [ //代理路径
         '/shopping',
         '/ugc',
@@ -45,7 +54,11 @@ module.exports = {
         '/img',
         '/user',
         '/goods',
-        '/train'
+        '/train',
+        '/strategy',
+        "/uploadImg",
+        '/touristSpot',
+        "/hotel"
     ],
     cssSourceMap: false
   }
