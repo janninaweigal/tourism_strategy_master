@@ -3,8 +3,8 @@
         <head-top></head-top>
         <div class="padding-20">
             <el-form inline @submit.native.prevent>
-                <el-form-item>
-                    <el-input v-model.trim="searchData.globalName" placeholder="酒店" class="input-width-230" @keyup.enter.native="search()"/>
+                <el-form-item label="全局搜索">
+                    <el-input v-model.trim="searchData.globalName" placeholder="酒店名称/房间号" class="input-width-230" @keyup.enter.native="search()"/>
                 </el-form-item>
                 <el-form-item>
                     <!-- 查询按钮 -->
@@ -14,9 +14,9 @@
                 </el-form-item>
             </el-form>
             <!-- 添加按钮 -->
-            <el-button type="primary" @click="addHotel">添加酒店</el-button>
+            <el-button type="primary" @click="addRoom">添加房间</el-button>
             <!-- 下方表格 -->
-            <customTable ref="customTable" isCheckImg :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getHotelList" delete-method="deleteHotel"/>
+            <customTable ref="customTable" isCheckImg :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getRoomList" delete-method="deleteRoom"/>
         </div>
     </div>
 </template>
@@ -27,7 +27,7 @@
     const api = require('@/api/getData')
     export default {
         // 名称
-        name: 'Hotel',
+        name: 'Room',
         data(){
             return {
                 loading: false,
@@ -38,24 +38,15 @@
                     globalName: ''
                 },
                 tableCols: [
-                    { label: '酒店名称', prop: 'Name'},
-                    { label: '图片', prop: 'Pictures',pictures: true},
-                    { label: '地址', prop: 'Address'},
-                    { label: '是否有早餐', prop: 'HasBreakfast',isSwitch:true},
-                    { label: '是否有wifi', prop: 'HasWifi',isSwitch:true},
-                    { label: '描述', prop: 'Detail'},
+                    { label: '酒店名称', prop: 'HotelName'},
+                    { label: '房间号', prop: 'RoomCode'},
+                    { label: '房间图片', prop: 'Pictures',pictures: true},
+                    { label: '床型', prop: 'BedType',bedType:true},
+                    { label: '价格', prop: 'Price'},
                     { label: '创建时间', prop: 'CreateTime',formMinutes:true}
                 ],
                 count: 0,
-                isCreate: true,
-                form: {
-                    Name: '',
-                    Pictures: [],
-                    Detail:'',
-                    Address: '',
-                    HasBreakfast:null,
-                    HasWifi:null
-                }
+                isCreate: true
             }
         },
     	components: {
@@ -75,11 +66,11 @@
             },
             edit(row){
                 this.isCreate = false
-                this.$router.replace({ path: '/hotelInfo',query: { id: row.Id}});
+                this.$router.replace({ path: '/roomInfo',query: { id: row.Id}});
             },
-            addHotel(){
+            addRoom(){
                 this.isCreate = true
-                this.$router.replace({ path: '/hotelInfo'});
+                this.$router.replace({ path: '/roomInfo'});
             }
         },
     }

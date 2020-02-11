@@ -2,14 +2,21 @@
     <div class="fillcontain">
         <head-top></head-top>
         <div class="padding-20">
-            <el-page-header @back="goBack" :content="isCreate?'添加酒店信息':'编辑酒店信息'" style="margin-bottom:20px;">
+            <el-page-header @back="goBack" :content="isCreate?'添加房间信息':'编辑房间信息'" style="margin-bottom:20px;">
             </el-page-header>
-            <el-form ref="hotelForm" :model="form" :rules="rules" label-width="100px">
-                <el-form-item label="酒店名称" prop="Name">
-                    <el-input v-model.trim="form.Name"/>
+            <el-form ref="roomForm" :model="form" :rules="rules" label-width="100px">
+                <el-form-item label="酒店" prop="HotelId">
+                    <el-select v-model="form.HotelId" style="width:55%" clearable filterable placeholder="请选择酒店">
+                        <el-option
+                        v-for="item in hotels"
+                        :key="item.Id"
+                        :label="item.Name"
+                        :value="item.Id">
+                        </el-option>
+                    </el-select>
                 </el-form-item>
-                <el-form-item label="地址" prop="Address">
-                    <el-input v-model.trim="form.Address"/>
+                <el-form-item label="房间号" prop="RoomCode">
+                    <el-input v-model.trim="form.RoomCode" placeholder="请填写房间号"/>
                 </el-form-item>
                 <el-form-item label="图片" prop="Pictures">
                     <el-upload
@@ -30,20 +37,14 @@
                     <div slot="tip" class="el-upload__tip">只能上传jpg/png文件,最多四张</div>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="是否有早餐" prop="HasBreakfast">
-                    <el-radio-group v-model="form.HasBreakfast">
-                        <el-radio :label="1">有早餐</el-radio>
-                        <el-radio :label="0">没早餐</el-radio>
+                <el-form-item label="床型" prop="BedType">
+                    <el-radio-group v-model="form.BedType">
+                        <el-radio :label="1">单人床</el-radio>
+                        <el-radio :label="2">双人床</el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item label="是否有wifi" prop="HasWifi">
-                    <el-radio-group v-model="form.HasWifi">
-                        <el-radio :label="1">有wifi</el-radio>
-                        <el-radio :label="0">没有wifi</el-radio>
-                    </el-radio-group>
-                </el-form-item>
-                <el-form-item label="描述" prop="Detail">
-                    <el-input type="textarea" :rows="5" v-model.trim="form.Detail"/>
+                <el-form-item label="价格" prop="Price">
+                    <el-input v-model.number="form.Price" placeholder="请填写价格"/>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" v-loading.fullscreen.lock="loading" @click="submitForm">提 交</el-button>
@@ -64,43 +65,47 @@
         name: 'hotelInfo',
         data(){
             return {
+                hotels: [],
                 isCreate: true,
                 loading: false,
                 dialogImageUrl: '',
                 dialogVisible: false,
                 form: {
-                    Name: '',
+                    HotelId: null,
+                    RoomCode: '',
                     Pictures: [],
-                    Detail:'',
-                    Address: '',
-                    HasBreakfast:null,
-                    HasWifi:null
+                    BedType:null,
+                    Price: null
                 },
                 formCopy: {},
                 rules: {
-                    Name: [
-                        { required: true, message: '请填写酒店名称', trigger: 'blur' }
+                    HotelId: [
+                        { required: true, message: '请选择酒店', trigger: 'blur' }
                     ],
-                    Address: [
-                        { required: true, message: '请填写地址', trigger: 'blur' }
+                    RoomCode: [
+                        { required: true, message: '请填写房间号', trigger: 'blur' }
                     ],
-                    Detail: [
-                        { required: true, message: '请填写描述', trigger: 'blur' }
+                    BedType: [
+                        { required: true, message: '请选择床型', trigger: 'blur' }
                     ],
-                    HasBreakfast: [
-                        { required: true, message: '请选择是否有早餐', trigger: 'blur' }
-                    ],
-                    HasWifi: [
-                        { required: true, message: '请选择是否有wifi', trigger: 'blur' }
+                    Price: [
+                        { required: true, message: '请填写价格', trigger: 'blur' }
                     ]
                 }
             }
         },
         created(){
+            api['getAllHotel']().then(res=>{
+                if(res.code ==1){
+                    this.hotels= res.data
+                }
+            })
+        },
+        mounted(){
             const params = this.$route.query;
             if (params.id) {
                 this.isCreate = false;
-                api['getHotelById']({id:params.id}).then(res=>{
+                api['getRoomById']({id:params.id}).then(res=>{
                     if(res.code ==1){
                         let data = res.data
                         data.Pictures = JSON.parse(data.Pictures).pictures
@@ -157,12 +162,12 @@
                 form.Pictures = JSON.stringify({"pictures":newPictures})
                 // form.Pictures = JSON.stringify({"pictures":form.Pictures})
                 this.loading = true
-                const method = this.isCreate?'insertHotel':'updateHotel'
+                const method = this.isCreate?'insertRoom':'updateRoom'
                 api[method](form).then(res=>{
                     this.loading = false;
                     if(res.code == 1){
                         this.resetForm();
-                        this.$router.replace({ path: '/hotelList' });// 跳转到列表页
+                        this.$router.replace({ path: '/roomList' });// 跳转到列表页
                         this.tipsMessage(res.msg, 'success')
                     } else {
                         this.tipsMessage(res.msg, 'error')
@@ -220,27 +225,26 @@
                         closeOnClickModal: false
                     }).then(() => {
                         this.resetForm()
-                        this.$router.replace({ path: '/hotelList' });// 跳转到列表页
+                        this.$router.replace({ path: '/roomList' });// 跳转到列表页
                     })
                 } else {
                     this.resetForm()
-                    this.$router.replace({ path: '/hotelList' });// 跳转到列表页
+                    this.$router.replace({ path: '/roomList' });// 跳转到列表页
                 }
             },
             resetForm(){
-                this.$refs.hotelForm.resetFields();
+                this.$refs.roomForm.resetFields();
                 this.$refs.upload.clearFiles()
                 this.form = {
-                    Name: '',
+                    HotelId: null,
+                    RoomCode: '',
                     Pictures: [],
-                    Detail:'',
-                    Address: '',
-                    HasBreakfast:null,
-                    HasWifi:null
+                    BedType:null,
+                    Price: ''
                 }
             },
             submitForm(){
-                this.$refs.hotelForm.validate((valid) => {
+                this.$refs.roomForm.validate((valid) => {
                     if (valid) {
                         this.submit();
                     } else {

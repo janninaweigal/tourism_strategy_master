@@ -14,13 +14,17 @@
                     <span>更换头像：</span>
                     <img :src="baseImgPath + adminInfo.avatar" class="avatar">
                     <el-upload
-                      :action="baseUrl + '/admin/update/avatar/' + adminInfo.id"
-                      :show-file-list="false"
-                      :on-success="uploadImg"
-                      :before-upload="beforeImgUpload">
-                      <el-button>更换头像</el-button>
-                    </el-upload>
-                </li>    
+                        action="/upladAvatar"
+                        ref="upload"
+                        accept=".jpg, .png"
+                        :show-file-list="false"
+                        :headers="uploadHead()"
+                        :before-upload="beforeImgUpload"
+                        :on-success="handleUploadSuccess">
+                        <el-button>更换头像</el-button>
+                        </el-upload>
+                    </el-form-item>
+                </li>
             </ul>
         </div>
     </div>
@@ -28,7 +32,7 @@
 
 <script>
 	import headTop from '@/components/headTop'
-    import {mapState} from 'vuex'
+    import {mapState,mapActions} from 'vuex'
     import {baseUrl, baseImgPath} from '@/config/env'
 
     export default {
@@ -45,11 +49,24 @@
             ...mapState(['adminInfo']),
         },
         methods: {
-            uploadImg(res, file) {
-                if (res.status == 1) {
-                    this.adminInfo.avatar = res.image_path;
+            ...mapActions(['saveAdminInfo']),
+            // 上传图片token
+            uploadHead() {
+                const token = this.$store.state.adminInfo.token
+                if (token) {
+                    const headers = {
+                        'Authorization': ['Bearer ', token].join('')
+                    };
+                    return headers;
+                }
+            },
+            handleUploadSuccess(res, file) {
+                if (res.code == 1) {
+                    this.adminInfo.avatar = res.data.name;
+                    this.saveAdminInfo(this.adminInfo);
+                    this.$message.success(res.msg);
                 }else{
-                    this.$message.error('上传图片失败！');
+                    this.$message.error(res.msg);
                 }
             },
             beforeImgUpload(file) {
@@ -70,12 +87,6 @@
 
 <style lang="less">
 	@import '../../style/mixin';
-	.explain_text{
-		margin-top: 20px;
-		text-align: center;
-		font-size: 20px;
-		color: #333;
-	}
     .admin_set{
         width: 60%;
         background-color: #F9FAFC;

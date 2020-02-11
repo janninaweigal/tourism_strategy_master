@@ -21,16 +21,17 @@
 						<template slot="title"><i class="el-icon-star-on"></i>车票管理</template>
 						<el-menu-item index="train">火车票</el-menu-item>
 					</el-submenu>
-					<el-submenu index="5">
+					<el-submenu index="6">
 						<template slot="title"><i class="el-icon-star-on"></i>旅游景点</template>
 						<el-menu-item index="touristSpot">景点列表</el-menu-item>
 					</el-submenu>
-					<el-submenu index="6">
+					<el-submenu index="7">
 						<template slot="title"><i class="el-icon-star-on"></i>酒店管理</template>
 						<el-menu-item index="hotelList">酒店列表</el-menu-item>
+						<el-menu-item index="roomList">房间列表</el-menu-item>
 						<!-- <el-menu-item index="hotelOrder">交易订单</el-menu-item> -->
 					</el-submenu>
-					<el-submenu index="7">
+					<el-submenu index="8">
 						<template slot="title"><i class="el-icon-setting"></i>社区服务</template>
 						<el-menu-item index="community">问题反馈</el-menu-item>
 					</el-submenu>

@@ -33,7 +33,7 @@
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['新注册用户', '新增订单', '新增管理员']
+                        data:['新注册用户', '新增管理员']
                     },
                     toolbox: {
                         show: true,
@@ -69,7 +69,7 @@
                         },
                         {
                           type: 'value',
-                          name: '订单',
+                          name: '管理员',
                           min: 0,
                           max: 200,
                           position: 'right',
@@ -97,21 +97,9 @@
                             },
                         },
                         {
-                            name:'新增订单',
-                            type:'line',
-                            data:this.sevenDate[1],
-                            yAxisIndex: 1,
-                            markPoint: {
-                                data: [
-                                    {type: 'max', name: '最大值'},
-                                    {type: 'min', name: '最小值'}
-                                ]
-                            },
-                        },
-                        {
                             name:'新增管理员',
                             type:'line',
-                            data:this.sevenDate[2],
+                            data:this.sevenDate[1],
                             yAxisIndex: 1,
                             markPoint: {
                                 data: [

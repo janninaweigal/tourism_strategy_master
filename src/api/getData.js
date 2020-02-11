@@ -6,6 +6,8 @@ export const login = data => fetch('/admin/login', data, 'POST');
 export const signout = () => fetch('/admin/signout');
 // 上传图片
 export const uploadImg = data => fetch('/uploadImg', data, 'POST');
+// 修改密码
+export const changePwd = data => fetch('/changePwd', data, 'POST');
 // --------------------------------用户信息 start--------------------------------
 //获取用户信息
 export const getAdminInfo = () => fetch('/admin/info');
@@ -75,6 +77,8 @@ export const deleteTouristSpot = data => fetch('/touristSpot/delete', data, 'DEL
 export const getHotelList = data => fetch('/hotel/list', data, 'POST');
 // 获取酒店详情
 export const getHotelById = data => fetch('/hotel', data, 'GET');
+// 得到所有的Id和Name
+export const getAllHotel = data => fetch('/hotels', data, 'GET');
 // 添加酒店
 export const insertHotel = data => fetch('/hotel/insert', data, 'POST');
 // 修改酒店
@@ -82,6 +86,33 @@ export const updateHotel = data => fetch('/hotel/update', data, 'PUT');
 // 删除酒店
 export const deleteHotel = data => fetch('/hotel/delete', data, 'DELETE');
 // --------------------------------end 酒店--------------------------------
+
+
+// --------------------------------酒店房间 start--------------------------------
+// 获取酒店房间列表
+export const getRoomList = data => fetch('/room/list', data, 'POST');
+// 获取酒店房间详情
+export const getRoomById = data => fetch('/room', data, 'GET');
+// 添加酒店房间
+export const insertRoom = data => fetch('/room/insert', data, 'POST');
+// 修改酒店房间
+export const updateRoom = data => fetch('/room/update', data, 'PUT');
+// 删除酒店房间
+export const deleteRoom = data => fetch('/room/delete', data, 'DELETE');
+// --------------------------------end 酒店房间--------------------------------
+
+// --------------------------------社区服务 start--------------------------------
+// 获取社区服务列表
+export const getCommunityList = data => fetch('/community/list', data, 'POST');
+// 获取社区服务详情
+export const getCommunityById = data => fetch('/community', data, 'GET');
+// 添加社区服务
+export const insertCommunity = data => fetch('/community/insert', data, 'POST');
+// 修改社区服务
+export const updateCommunity = data => fetch('/community/update', data, 'PUT');
+// 删除社区服务
+export const deleteCommunity = data => fetch('/community/delete', data, 'DELETE');
+// --------------------------------end 社区服务--------------------------------
 
 // --------------------------------统计 start--------------------------------
 //用户注册量

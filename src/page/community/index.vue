@@ -1,79 +1,76 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
-        <div class="table_container">
-            <el-table
-		      :data="tableData"
-		      style="width: 100%">
-		      <el-table-column
-		        prop="user_name"
-		        label="姓名"
-		        width="180">
-		      </el-table-column>
-		      <el-table-column
-		        prop="create_time"
-		        label="注册日期"
-		        width="220">
-		      </el-table-column>
-              <el-table-column
-                prop="city"
-                label="地址"
-                width="180">
-              </el-table-column>
-		      <el-table-column
-		        prop="admin"
-		        label="权限">
-		      </el-table-column>
-		    </el-table>
-		    <div class="Pagination" style="text-align: left;margin-top: 10px;">
-                <el-pagination
-                  @size-change="handleSizeChange"
-                  @current-change="handleCurrentChange"
-                  :current-page="currentPage"
-                  :page-size="20"
-                  layout="total, prev, pager, next"
-                  :total="count">
-                </el-pagination>
-            </div>
+        <div class="padding-20">
+            <el-form inline @submit.native.prevent>
+                <el-form-item label="全局搜索">
+                    <el-input v-model.trim="searchData.globalName" placeholder="用户名" class="input-width-230" @keyup.enter.native="search()"/>
+                </el-form-item>
+                <el-form-item>
+                    <!-- 查询按钮 -->
+                    <el-button type="primary" @click="search()" >搜索</el-button>
+                    <!-- 重置按钮 -->
+                    <el-button class="button" @click="reset">重置</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- 添加按钮 -->
+            <el-button type="primary" @click="addComment">添加反馈</el-button>
+            <!-- 下方表格 -->
+            <customTable ref="customTable" isCheckImg :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getCommunityList" delete-method="deleteCommunity"/>
         </div>
     </div>
 </template>
 
 <script>
     import headTop from '@/components/headTop'
-    // import {adminList, adminCount} from '@/api/getData'
+    import customTable from '@/components/table';
+    const api = require('@/api/getData')
     export default {
+        // 名称
+        name: 'Community',
         data(){
             return {
+                loading: false,
                 tableData: [],
-                currentRow: null,
-                offset: 0,
-                limit: 20,
+                searchData: {
+                    pageSize: 10,
+                    pageNo: 1,
+                    globalName: ''
+                },
+                tableCols: [
+                    { label: '用户', prop: 'Username'},
+                    { label: '内容', prop: 'Content'},
+                    { label: '创建时间', prop: 'CreateTime',formMinutes:true}
+                ],
                 count: 0,
-                currentPage: 1,
+                isCreate: true
             }
         },
     	components: {
-    		headTop,
+            headTop,
+            customTable
     	},
-        created(){
-            this.initData();
-        },
         methods: {
-            async initData(){
+            search(){
+                this.$refs.customTable.search();
+            },
+            // 重置搜索条件
+            reset() {
+                this.searchData.globalName = '';
             },
             handleSizeChange(val) {
-                console.log(`每页 ${val} 条`);
+                this.searchData.pageNo = val;
             },
-            handleCurrentChange(val) {
-                this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
+            edit(row){
+                this.isCreate = false
+                this.$router.replace({ path: '/communityInfo',query: { id: row.Id}});
+            },
+            addComment(){
+                this.isCreate = true
+                this.$router.replace({ path: '/communityInfo'});
             }
         },
     }
 </script>
 
-<style lang="less">
-	@import '../../style/mixin';
-</style>
 

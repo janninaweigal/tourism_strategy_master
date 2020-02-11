@@ -3,7 +3,7 @@
         <head-top></head-top>
         <div class="padding-20">
             <el-form inline @submit.native.prevent>
-                <el-form-item>
+                <el-form-item label="全局搜索">
                     <el-input v-model.trim="searchData.globalName" placeholder="景点" class="input-width-230" @keyup.enter.native="search()"/>
                 </el-form-item>
                 <el-form-item>
@@ -45,13 +45,7 @@
                     { label: '创建时间', prop: 'CreateTime',formMinutes:true}
                 ],
                 count: 0,
-                isCreate: true,
-                form: {
-                    Name: '',
-                    Pictures: [],
-                    Detail: '',
-                    Address: ''
-                }
+                isCreate: true
             }
         },
     	components: {

@@ -37,6 +37,13 @@ const routes = [
 				title: '个人中心'
 			}
 		},
+		{
+			path: '/changePassword',
+			component: resolve => require(['@/page/userManage/changePassword'], resolve),
+			meta: {
+				title: '修改密码'
+			}
+		},
 		// 旅行必备
 		{
 			path: '/goodsList',
@@ -90,11 +97,26 @@ const routes = [
 			component: resolve => require(['@/page/hotel/order'], resolve),
 			meta: ['酒店管理','交易订单']
 		},
+		{
+			path: '/roomList',
+			component: resolve => require(['@/page/hotel/room/index'], resolve),
+			meta: ['酒店管理','房间列表']
+		},
+		{
+			path: '/roomInfo',
+			component: resolve => require(['@/page/hotel/room/info'], resolve),
+			meta: ['酒店管理']
+		},
 		// 社区服务
 		{
 			path: '/community',
 			component: resolve => require(['@/page/community/index'], resolve),
 			meta: ['社区服务','问题反馈']
+		},
+		{
+			path: '/communityInfo',
+			component: resolve => require(['@/page/community/info'], resolve),
+			meta: ['社区服务']
 		}
 	]
 	}

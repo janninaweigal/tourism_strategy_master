@@ -58,7 +58,11 @@ module.exports = {
         '/strategy',
         "/uploadImg",
         '/touristSpot',
-        "/hotel"
+        "/hotel",
+        "/room",
+        "/community",
+        "/upladAvatar",
+        "/changePwd"
     ],
     cssSourceMap: false
   }

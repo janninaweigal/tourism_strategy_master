@@ -23,6 +23,9 @@
           <span v-else-if="item.goodType">
             {{scope.row[item.prop]===1?'自营':'非自营'}}
           </span>
+          <span v-else-if="item.bedType">
+            {{scope.row[item.prop]===1?'单人床':'双人床'}}
+          </span>
           <span v-else-if="item.isSwitch" :style="{'color':scope.row[item.prop]===1?'#00ff89':'red'}">
             {{scope.row[item.prop]===1?'是':'否'}}
           </span>

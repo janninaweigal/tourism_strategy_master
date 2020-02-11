@@ -9,6 +9,7 @@
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="statistics">首页</el-dropdown-item>
 				<el-dropdown-item command="adminInfo">个人中心</el-dropdown-item>
+				<el-dropdown-item command="changePassword">修改密码</el-dropdown-item>
 				<el-dropdown-item command="signout">退出</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown>
@@ -32,16 +33,18 @@
 		methods: {
 			async handleCommand(command) {
 				if (command == 'statistics') {
-					this.$router.push('/home');
+					this.$router.replace('/home');
 				}else if(command == 'adminInfo'){
-					this.$router.push('/adminInfo');
+					this.$router.replace('/adminInfo');
+				}else if(command == 'changePassword'){
+					this.$router.replace('/changePassword');
 				}else if(command == 'signout'){
 					sessionStorage.removeItem('adminToken')
 					this.$message({
 						type: 'success',
 						message: '退出成功'
 					});
-					this.$router.push('/');
+					this.$router.replace('/');
 				}
 			},
 		}

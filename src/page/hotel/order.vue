@@ -2,8 +2,8 @@
     <div class="fillcontain">
         <head-top></head-top>
         <div class="padding-20">
-            <el-form ref="formSearch" inline @submit.native.prevent>
-                <el-form-item>
+            <el-form inline @submit.native.prevent>
+                <el-form-item label="全局搜索">
                     <el-input v-model.trim="searchData.globalName" placeholder="用户名/邮箱" class="input-width-230" @keyup.enter.native="search()"/>
                 </el-form-item>
                 <el-form-item>
