@@ -21,6 +21,7 @@ const routes = [
 		children: [{
 			path: '',
 			component: resolve => require(['@/page/statistics'], resolve),
+			keepAlive: false,
 			meta: {
 				title: '主页统计'
 			}

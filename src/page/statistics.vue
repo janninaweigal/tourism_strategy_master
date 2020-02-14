@@ -31,7 +31,7 @@
                 allUserCount: null,
                 allAdminCount: null,
     			sevenDay: [],
-    			sevenDate: [[],[],[]],
+    			sevenDate: [[],[]],
     		}
     	},
     	components: {

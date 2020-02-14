@@ -47,6 +47,9 @@
                         </el-radio-group>
                         <el-input v-if="[1,2,0].indexOf(form.Status)!=-1" v-model="form.Num" placeholder="请填写物品数量"></el-input>
                     </el-form-item>
+                    <el-form-item label="描述" prop="Detail">
+                        <el-input type="textarea" :rows="5" v-model.trim="form.Detail"/>
+                    </el-form-item>
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="handleClose">取 消</el-button>
@@ -92,6 +95,7 @@
                     { label: '类别', prop: 'Type',goodType: true},
                     { label: '物品状态', prop: 'Status',goodStatus: true},
                     { label: '数量', prop: 'Num'},
+                    { label: '描述', prop: 'Detail'},
                     { label: '创建时间', prop: 'CreateTime',formMinutes:true,width:'180px'}
                 ],
                 count: 0,
@@ -102,7 +106,8 @@
                     Price: '',
                     Type: false,
                     Status: null,
-                    Num: ''
+                    Num: '',
+                    Detail:''
                 },
                 dialogVisible: false,
                 rules: {
@@ -118,6 +123,9 @@
                     ],
                     Status: [
                         { required: true, validator:statusRule, trigger: 'change' }
+                    ],
+                    Detail: [
+                        { required: true, message: '请填写描述', trigger: 'blur' }
                     ]
                 }
             }
@@ -192,10 +200,13 @@
             resetForm(){
                 this.$refs.dialogForm.resetFields();
                 this.form = {
-                    username: '',
-                    email: '',
-                    avatar: '',
-                    isAdmin: false
+                    Name: '',
+                    Photo: '',
+                    Price: '',
+                    Type: false,
+                    Status: null,
+                    Num: '',
+                    Detail:''
                 }
             },
             uploadAvatar(file){

@@ -1,6 +1,6 @@
 <template>
     <div class="line1">
-        <div id="line1" class="" style="width: 90%;height:450px;"></div>
+        <div id="line1" style="width: 90%;height:450px;"></div>
     </div>
 </template>
 
@@ -22,9 +22,9 @@
         props: ['sevenDate', 'sevenDay'],
         methods: {
             initData(){
-                const colors = ['#5793f3', '#675bba', '#d14a61'];
+                const sevenDate = this.sevenDate;
                 const option = {
-                    color: colors,
+                    color: ['#5793f3', '#675bba'],
                     title: {
                         text: '走势图',
                         subtext: ''
@@ -56,7 +56,7 @@
                           type: 'value',
                           name: '用户',
                           min: 0,
-                          max: 200,
+                          max: 100,
                           position: 'left',
                           axisLine: {
                               lineStyle: {
@@ -71,7 +71,7 @@
                           type: 'value',
                           name: '管理员',
                           min: 0,
-                          max: 200,
+                          max: 100,
                           position: 'right',
                           axisLine: {
                               lineStyle: {
@@ -87,7 +87,7 @@
                         {
                             name:'新注册用户',
                             type:'line',
-                            data:this.sevenDate[0],
+                            data:sevenDate[0],
                             yAxisIndex: 1,
                             markPoint: {
                                 data: [
@@ -99,7 +99,7 @@
                         {
                             name:'新增管理员',
                             type:'line',
-                            data:this.sevenDate[1],
+                            data:sevenDate[1],
                             yAxisIndex: 1,
                             markPoint: {
                                 data: [
@@ -110,7 +110,7 @@
                         }
                     ]
               };
-                this.myChart.setOption(option);
+                this.myChart.setOption(option,true);
             }
         },
         watch: {
