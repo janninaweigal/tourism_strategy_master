@@ -108,7 +108,10 @@
                 api['getRoomById']({id:params.id}).then(res=>{
                     if(res.code ==1){
                         let data = res.data
-                        data.Pictures = JSON.parse(data.Pictures).pictures
+                        data.Pictures = JSON.parse(data.Pictures).pictures.map(item=>{
+                            item.url = process.env.imgUrl+item.url;
+                            return item;
+                        })
                         this.form = data
                         this.formCopy = Object.assign({},data)
                         this.tipsMessage(res.msg, 'success')
@@ -148,19 +151,20 @@
             submit(){
                 let form = Object.assign({},this.form)
                 // 重组name 和 url
-                const newPictures = []
-                for(const item of form.Pictures){
+                let newPictures = []
+                for(let item of form.Pictures){
                     if(item.response&&item.response.data){
-                        newPictures.push(item.response.data)
+                        let data = item.response.data;
+                        data.url = data.url.slice(data.url.indexOf('images'))
+                        newPictures.push(data)
                     } else {
                         newPictures.push({
                             name:item.name,
-                            url:item.url
+                            url:item.url.slice(item.url.indexOf('images'))
                         })
                     }
                 }
                 form.Pictures = JSON.stringify({"pictures":newPictures})
-                // form.Pictures = JSON.stringify({"pictures":form.Pictures})
                 this.loading = true
                 const method = this.isCreate?'insertRoom':'updateRoom'
                 api[method](form).then(res=>{

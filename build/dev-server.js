@@ -51,11 +51,16 @@ compiler.plugin('compilation', function (compilation) {
 // })
 
 var context = config.dev.context
-
+var proxypath = ''
 switch(process.env.NODE_ENV){
-    case 'local': var proxypath = 'http://localhost:3000'; break;
-    case 'online': var proxypath = 'http://elm.cangdu.org'; break;
+    case 'local':
+      proxypath = 'http://localhost:3000';
+      break;
+    case 'online':
+      proxypath = 'http://111.230.236.23:3000';
+      break;
 }
+config.dev.env.imgUrl = `"${proxypath}/"`;
 var options = {
     target: proxypath,
     changeOrigin: true,

@@ -18,7 +18,7 @@
             <img :src="imgUrl + scope.row[item.prop]" width="40px" height="40px"/>
           </span>
           <span v-else-if="item.pictures">
-            <img v-for="item in JSON.parse(scope.row[item.prop]).pictures" style="cursor:pointer;margin-right:5px;margin-bottom:5px;" :src="item.url" @click="preview(item.url)" width="40px" height="40px"/>
+            <img v-for="item in JSON.parse(scope.row[item.prop]).pictures" style="cursor:pointer;margin-right:5px;margin-bottom:5px;" :src="imgUrl+item.url" @click="preview(imgUrl+item.url)" width="40px" height="40px"/>
           </span>
           <span v-else-if="item.goodType">
             {{scope.row[item.prop]===1?'自营':'非自营'}}
@@ -169,7 +169,7 @@ export default {
       loading: false,
       currentRow: null,
       total: 0,
-      imgUrl: process.env.LOCAL_API
+      imgUrl: process.env.imgUrl
     };
   },
   created(){

@@ -271,15 +271,6 @@
                     Seats: []
                 }
             },
-            uploadAvatar(file){
-                this.form.Photo = file.url
-                // 实例化FormData对象
-                const reader = new FileReader();
-                reader.readAsDataURL(file.raw);
-                reader.onloadend = ()=> {
-                    this.form.file = reader.result
-                }
-            },
             tipsMessage(txt, type) {
                 // 消息提示
                 this.$message({

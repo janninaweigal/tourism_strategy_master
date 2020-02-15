@@ -30,7 +30,7 @@
                         <el-input v-model="form.Price"></el-input>
                     </el-form-item>
                     <el-form-item label="图片" prop="Photo">
-                        <upload-img :image-url="form.Photo" @uploadAvatar="uploadAvatar"/>
+                        <upload-img :image-path="form.Photo" @uploadAvatar="uploadAvatar"/>
                     </el-form-item>
                     <el-form-item label="是否自营">
                         <el-switch
@@ -149,7 +149,7 @@
             edit(row){
                 const form = Object.assign({},row)
                 form.Type = form.Type ==1
-                form.Photo = process.env.LOCAL_API + form.Photo
+                form.Photo = process.env.imgUrl + form.Photo
                 this.isCreate = false
                 this.form = form
                 this.dialogVisible = true
@@ -168,12 +168,6 @@
                 this.$refs.dialogForm.validate((valid) => {
                     if (valid) {
                         let form = Object.assign({},this.form)
-                        if(form.Photo){
-                            const reg=new RegExp(process.env.LOCAL_API,"gmi");
-                            if(form.Photo.indexOf(process.env.LOCAL_API)!=-1){
-                                form.Photo = form.Photo.replace(reg,'')
-                            }
-                        }
                         form.Type = form.Type?1:0
                         this.loading = true
                         const method = this.isCreate?'insertGoods':'updateGoods'
@@ -210,12 +204,11 @@
                 }
             },
             uploadAvatar(file){
-                this.form.Photo = file.url
                 // 实例化FormData对象
                 const reader = new FileReader();
                 reader.readAsDataURL(file.raw);
                 reader.onloadend = ()=> {
-                    this.form.file = reader.result
+                    this.form.Photo = reader.result
                 }
             },
             tipsMessage(txt, type) {

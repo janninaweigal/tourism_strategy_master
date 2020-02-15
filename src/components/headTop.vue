@@ -5,7 +5,7 @@
 			<el-breadcrumb-item v-for="(item, index) in $route.meta" :key="index">{{item}}</el-breadcrumb-item>
 		</el-breadcrumb>
 		<el-dropdown @command="handleCommand">
-			<div class="userbox"><span class="username">{{adminInfo.username}}</span><img :src="baseImgPath + adminInfo.avatar" class="avator"></div>
+			<div class="userbox"><span class="username">{{adminInfo.username}}</span><img :src="imgUrl + adminInfo.avatar" class="avator"></div>
 			<el-dropdown-menu slot="dropdown">
 				<el-dropdown-item command="statistics">首页</el-dropdown-item>
 				<el-dropdown-item command="adminInfo">个人中心</el-dropdown-item>
@@ -18,13 +18,12 @@
 
 <script>
 	import {signout} from '@/api/getData'
-	import {baseImgPath} from '@/config/env'
 	import {mapState} from 'vuex'
 
     export default {
     	data(){
     		return {
-    			baseImgPath,
+    			imgUrl: process.env.imgUrl
     		}
     	},
     	computed: {

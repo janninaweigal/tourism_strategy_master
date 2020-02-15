@@ -37,7 +37,7 @@
                         </el-switch>
                     </el-form-item>
                     <el-form-item label="头像">
-                        <upload-img :image-url="form.avatar" @uploadAvatar="uploadAvatar"/>
+                        <upload-img :image-path="form.avatar" @uploadAvatar="uploadAvatar"/>
                     </el-form-item>
                     <el-form-item label="备注">
                         <el-input type="textarea" disabled v-model="desc"></el-input>
@@ -121,7 +121,7 @@
                 this.form.id = form.Id
                 this.form.username = form.Username
                 this.form.email = form.Email
-                this.form.avatar = process.env.LOCAL_API + form.Avatar
+                this.form.avatar = process.env.imgUrl +form.Avatar
                 this.form.isAdmin = form.isAdmin ==1
                 this.dialogVisible = true
             },
@@ -139,12 +139,6 @@
                 this.$refs.dialogForm.validate((valid) => {
                     if (valid) {
                         let form = Object.assign({},this.form)
-                        if(form.avatar){
-                            const reg=new RegExp(process.env.LOCAL_API,"gmi");
-                            if(form.avatar.indexOf(process.env.LOCAL_API)!=-1){
-                                form.avatar = form.avatar.replace(reg,'')
-                            }
-                        }
                         this.loading = true
                         const method = this.isCreate?'insertUser':'updateUser'
                         api[method](form).then(res=>{
@@ -177,12 +171,11 @@
                 }
             },
             uploadAvatar(file){
-                this.form.avatar = file.url
                 // 实例化FormData对象
                 const reader = new FileReader();
                 reader.readAsDataURL(file.raw);
                 reader.onloadend = ()=> {
-                    this.form.file = reader.result
+                    this.form.avatar = reader.result
                 }
             },
             tipsMessage(txt, type) {

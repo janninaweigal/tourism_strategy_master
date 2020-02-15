@@ -1,6 +1,6 @@
 <template>
     <div class="uploadContainer">
-        <img v-if="imageUrl" width="160px" height="160px" :src="imageUrl">
+        <img v-if="imagePath" width="160px" height="160px" :src="imagePath">
         <el-upload
             class="avatar-uploader"
             action=""
@@ -17,7 +17,7 @@
     export default {
         props: {
             // 图片地址
-            imageUrl: {
+            imagePath: {
                 type: String,
                 default: ''
             }
