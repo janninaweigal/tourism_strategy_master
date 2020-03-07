@@ -4,7 +4,7 @@
         <div class="padding-20">
             <el-form inline @submit.native.prevent>
                 <el-form-item>
-                    <el-input v-model.trim="searchData.globalName" placeholder="酒店名称/房间号" class="input-width-230" @keyup.enter.native="search()"/>
+                    <el-input v-model.trim="searchData.globalName" placeholder="门票" class="input-width-230" @keyup.enter.native="search()"/>
                 </el-form-item>
                 <el-form-item>
                     <!-- 查询按钮 -->
@@ -14,9 +14,10 @@
                 </el-form-item>
             </el-form>
             <!-- 添加按钮 -->
-            <el-button type="primary" @click="addRoom">添加房间</el-button>
+            <el-button type="primary" @click="addTouristSpotTicket">添加门票</el-button>
             <!-- 下方表格 -->
-            <customTable ref="customTable" isCheckImg :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getRoomList" delete-method="deleteRoom"/>
+            <customTable ref="customTable" :table-cols="tableCols" :search-data.sync="searchData" :change-page="handleSizeChange" :on-edit="edit" search-method="getTouristSpotTicketList" delete-method="deleteTouristSpotTicket"/>
+        
         </div>
     </div>
 </template>
@@ -27,7 +28,7 @@
     const api = require('@/api/getData')
     export default {
         // 名称
-        name: 'Room',
+        name: 'touristSpotTicket',
         data(){
             return {
                 loading: false,
@@ -38,11 +39,10 @@
                     globalName: ''
                 },
                 tableCols: [
-                    { label: '酒店名称', prop: 'HotelName'},
-                    { label: '房间号', prop: 'RoomCode'},
-                    { label: '房间图片', prop: 'Pictures',pictures: true},
-                    { label: '床型', prop: 'BedType',bedType:true},
-                    { label: '价格', prop: 'Price'},
+                    { label: '景点名称', prop: 'Name'},
+                    { label: '图片', prop: 'Pictures',pictures: true},
+                    { label: '地址', prop: 'Address'},
+                    { label: '描述', prop: 'Detail'},
                     { label: '创建时间', prop: 'CreateTime',formMinutes:true}
                 ],
                 count: 0,
@@ -66,11 +66,9 @@
             },
             edit(row){
                 this.isCreate = false
-                this.$router.replace({ path: '/roomInfo',query: { id: row.Id}});
             },
-            addRoom(){
+            addTouristSpotTicket(){
                 this.isCreate = true
-                this.$router.replace({ path: '/roomInfo'});
             }
         },
     }

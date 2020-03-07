@@ -3,7 +3,7 @@
         <head-top></head-top>
         <div class="padding-20">
             <el-form inline @submit.native.prevent>
-                <el-form-item label="全局搜索">
+                <el-form-item>
                     <el-input v-model.trim="searchData.globalName" placeholder="用户名" class="input-width-230" @keyup.enter.native="search()"/>
                 </el-form-item>
                 <el-form-item>

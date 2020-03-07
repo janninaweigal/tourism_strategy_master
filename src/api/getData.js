@@ -32,6 +32,12 @@ export const updateGoods = data => fetch('/goods/update', data, 'PUT');
 export const deleteGoods = data => fetch('/goods/delete', data, 'DELETE');
 // --------------------------------end 商品信息--------------------------------
 
+
+// --------------------------------商品订单信息 start--------------------------------
+// 获取商品订单列表
+export const getGoodsOrderList = data => fetch('/goods/order/list', data, 'POST');
+// --------------------------------end 商品订单信息--------------------------------
+
 // --------------------------------火车票信息 start--------------------------------
 // 获取火车票列表
 export const getTrainList = data => fetch('/train/list', data, 'POST');

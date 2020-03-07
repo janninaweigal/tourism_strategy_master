@@ -11,7 +11,7 @@
 					<el-submenu index="3">
 						<template slot="title"><i class="el-icon-plus"></i>旅行必备</template>
 						<el-menu-item index="goodsList">商品列表</el-menu-item>
-						<!-- <el-menu-item index="goodsOrder">交易订单</el-menu-item> -->
+						<el-menu-item index="goodsOrder">交易订单</el-menu-item>
 					</el-submenu>
 					<el-submenu index="4">
 						<template slot="title"><i class="el-icon-edit"></i>攻略信息</template>

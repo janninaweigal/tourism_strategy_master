@@ -8,7 +8,6 @@ import 'element-ui/lib/theme-chalk/index.css'
 import * as filters from './filters';
 
 Vue.config.productionTip = false;
-
 Vue.use(ElementUI);
 // 注册全局过滤器
 Object.keys(filters).forEach(key => {

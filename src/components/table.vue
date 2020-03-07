@@ -47,14 +47,16 @@
         </template>
       </el-table-column>
       <!-- 操作按钮 -->
-      <el-table-column :fixed="fixed ? 'right' : false" label="操作">
+      <el-table-column :fixed="fixed ? 'right' : false" label="操作" v-if="isOperate">
         <template slot-scope="scope">
-          <el-button type="text" @click="edit(scope.row)">编辑</el-button>
-          <div class="buttonLine" />
-          <el-button class="text-danger" type="text" @click="remove(scope.row)">删除</el-button>
-          <div v-show="isCheck">
-            <div class="buttonLine" />
-            <el-button type="info" @click="checkInfo(scope.row)">查看详情</el-button>
+          <el-button v-if="isEdit" type="text" @click="edit(scope.row)">编辑</el-button>
+          <div v-if="isDelete">
+            <div v-if="isEdit" class="buttonLine" />
+            <el-button class="text-danger" type="text" @click="remove(scope.row)">删除</el-button>
+          </div>
+          <div v-if="isCheck">
+            <div v-if="isDelete" class="buttonLine" />
+            <el-button type="text" @click="checkInfo(scope.row)">查看详情</el-button>
           </div>
         </template>
       </el-table-column>
@@ -98,6 +100,18 @@ export default {
     isCheck:{
       type: Boolean,
       default: false
+    },
+    isEdit:{
+      type: Boolean,
+      default: true
+    },
+    isDelete:{
+      type: Boolean,
+      default: true
+    },
+    isOperate:{
+      type: Boolean,
+      default: true
     },
     isCheckImg:{
       type: Boolean,
