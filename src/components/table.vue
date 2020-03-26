@@ -50,14 +50,14 @@
       <el-table-column :fixed="fixed ? 'right' : false" label="操作" v-if="isOperate">
         <template slot-scope="scope">
           <el-button v-if="isEdit" type="text" @click="edit(scope.row)">编辑</el-button>
-          <div v-if="isDelete">
-            <div v-if="isEdit" class="buttonLine" />
+          <span v-if="isDelete">
+            <span v-if="isEdit" class="buttonLine" />
             <el-button class="text-danger" type="text" @click="remove(scope.row)">删除</el-button>
-          </div>
-          <div v-if="isCheck">
-            <div v-if="isDelete" class="buttonLine" />
+          </span>
+          <span v-if="isCheck">
+            <span v-if="isDelete" class="buttonLine" />
             <el-button type="text" @click="checkInfo(scope.row)">查看详情</el-button>
-          </div>
+          </span>
         </template>
       </el-table-column>
     </el-table>
@@ -73,7 +73,7 @@
         next-text="下一页"
         :total="total">
       </el-pagination>
-      <div v-show="isCheckImg">
+      <div v-if="isCheckImg">
         <el-dialog :visible.sync="dialogVisible">
           <img :src="dialogImageUrl" width="100%" alt="">
         </el-dialog>
@@ -115,7 +115,7 @@ export default {
     },
     isCheckImg:{
       type: Boolean,
-      default: false
+      default: true
     },
     // 搜索条件
     searchData: {
