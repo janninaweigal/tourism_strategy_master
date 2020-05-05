@@ -14,6 +14,7 @@
 					</el-form-item>
 					<el-form-item>
 				    	<el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
+						<el-link type="primary" :underline="false" href="http://localhost:3000"><i class="el-icon-view el-icon--right"></i>前台入口</el-link>
 				  	</el-form-item>
 				</el-form>
 	  		</section>

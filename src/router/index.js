@@ -83,6 +83,11 @@ const routes = [
 			component: resolve => require(['@/page/touristSpot/info'], resolve),
 			meta: ['旅游景点']
 		},
+		{
+			path: '/touristTicket',
+			component: resolve => require(['@/page/touristSpot/ticket'], resolve),
+			meta: ['景点门票']
+		},
 		// 酒店管理
 		{
 			path: '/hotelList',

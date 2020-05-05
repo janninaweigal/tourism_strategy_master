@@ -17,8 +17,22 @@
           <span v-else-if="item.isAvatar">
             <img :src="imgUrl + scope.row[item.prop]" width="40px" height="40px"/>
           </span>
+          <span v-else-if="item.ticketType">
+            {{scope.row[item.prop]===1?'儿童票':'成人票'}}
+          </span>
+          <span v-else-if="item.appointUserNum">
+            <span v-if="scope.row[item.prop]" style="cursor:pointer;color:blue" @click="getAppointUser(scope.row[item.prop])">
+              {{scope.row[item.prop].split(",").length}} 人
+            </span>
+            <span v-else>
+              暂无预约
+            </span>
+          </span>
           <span v-else-if="item.pictures">
-            <img v-for="item in JSON.parse(scope.row[item.prop]).pictures" style="cursor:pointer;margin-right:5px;margin-bottom:5px;" :src="imgUrl+item.url" @click="preview(imgUrl+item.url)" width="40px" height="40px"/>
+            <div v-if="scope.row[item.prop]">
+              <img v-for="item in JSON.parse(scope.row[item.prop]).pictures" style="cursor:pointer;margin-right:5px;margin-bottom:5px;" :src="imgUrl+item.url" @click="preview(imgUrl+item.url)" width="40px" height="40px"/>
+            </div>
+            <span v-else></span>
           </span>
           <span v-else-if="item.goodType">
             {{scope.row[item.prop]===1?'自营':'非自营'}}
@@ -26,7 +40,7 @@
           <span v-else-if="item.bedType">
             {{scope.row[item.prop]===1?'单人床':'双人床'}}
           </span>
-          <span v-else-if="item.isSwitch" :style="{'color':scope.row[item.prop]===1?'#00ff89':'red'}">
+          <span v-else-if="item.isSwitch" :style="{'color':scope.row[item.prop]===1?'#13ce66':'#ff4949'}">
             {{scope.row[item.prop]===1?'是':'否'}}
           </span>
           <span v-else-if="item.goodStatus">
@@ -248,6 +262,9 @@ export default {
           })
         }
       }).catch(() => { });
+    },
+    getAppointUser(userIds){
+      this.$emit("appointUser",userIds)
     },
     /**
      * 改变每页显示条数

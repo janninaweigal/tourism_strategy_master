@@ -122,7 +122,7 @@
                 this.form.username = form.Username
                 this.form.email = form.Email
                 this.form.avatar = process.env.imgUrl +form.Avatar
-                this.form.isAdmin = form.isAdmin ==1
+                this.form.isAdmin = form.IsAdmin ==1
                 this.dialogVisible = true
             },
             addAdminInfo(){

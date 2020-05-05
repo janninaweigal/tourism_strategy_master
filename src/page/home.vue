@@ -24,6 +24,7 @@
 					<el-submenu index="6">
 						<template slot="title"><i class="el-icon-star-on"></i>旅游景点</template>
 						<el-menu-item index="touristSpot">景点列表</el-menu-item>
+						<el-menu-item index="touristTicket">景点门票</el-menu-item>
 					</el-submenu>
 					<el-submenu index="7">
 						<template slot="title"><i class="el-icon-star-on"></i>酒店管理</template>

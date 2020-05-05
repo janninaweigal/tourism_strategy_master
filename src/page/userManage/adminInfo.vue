@@ -62,7 +62,7 @@
             },
             handleUploadSuccess(res, file) {
                 if (res.code == 1) {
-                    this.adminInfo.avatar = res.data.name;
+                    this.adminInfo.avatar = res.data.url;
                     this.saveAdminInfo(this.adminInfo);
                     this.$message.success(res.msg);
                 }else{

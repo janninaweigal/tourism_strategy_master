@@ -68,6 +68,8 @@ export const deleteStrategy = data => fetch('/strategy/delete', data, 'DELETE');
 // --------------------------------旅游景点 start--------------------------------
 // 获取景点列表
 export const getTouristSpotList = data => fetch('/touristSpot/list', data, 'POST');
+// 获取所有景点
+export const getAllTouristSpot = data => fetch('/touristSpot/all', data, 'GET');
 // 获取景点详情
 export const getTouristSpotById = data => fetch('/touristSpot', data, 'GET');
 // 添加景点
@@ -77,6 +79,21 @@ export const updateTouristSpot = data => fetch('/touristSpot/update', data, 'PUT
 // 删除景点
 export const deleteTouristSpot = data => fetch('/touristSpot/delete', data, 'DELETE');
 // --------------------------------end 旅游景点--------------------------------
+
+// --------------------------------旅游景点门票 start--------------------------------
+// 获取景点门票列表
+export const getTouristSpotTicketList = data => fetch('/touristSpotTicket/list', data, 'POST');
+// 获取景点门票预约人数
+export const getAppointUsers = data => fetch('/touristSpotTicket/appointUsers', data, 'GET');
+// 获取景点门票详情
+export const getTouristSpotTicketById = data => fetch('/touristSpotTicket', data, 'GET');
+// 添加景点门票
+export const insertTouristSpotTicket = data => fetch('/touristSpotTicket/insert', data, 'POST');
+// 修改景点门票
+export const updateTouristSpotTicket = data => fetch('/touristSpotTicket/update', data, 'PUT');
+// 删除景点门票
+export const deleteTouristSpotTicket = data => fetch('/touristSpotTicket/delete', data, 'DELETE');
+// --------------------------------end 旅游景点门票--------------------------------
 
 // --------------------------------酒店 start--------------------------------
 // 获取酒店列表
